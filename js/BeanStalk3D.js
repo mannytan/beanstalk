@@ -39,8 +39,8 @@ BEANSTALK.BeanStalk3D = function(name) {
 
 	this.particles = null;
 
-	this.totalPlanesH = getUrlVars()["totalWidth"] ? getUrlVars()["totalWidth"] : 28;
-	this.totalPlanesV = getUrlVars()["totalDepth"] ? getUrlVars()["totalDepth"] : 12;
+	this.totalPlanesH = getUrlVars()["totalWidth"] ? getUrlVars()["totalWidth"] : 12;
+	this.totalPlanesV = getUrlVars()["totalDepth"] ? getUrlVars()["totalDepth"] : 6;
 	this.totalVerticesH = this.totalPlanesH*2 + 1;
 	this.totalVerticesV = this.totalPlanesV*2 + 1;
 	this.totalVertices = this.totalVerticesH * this.totalVerticesV;
@@ -54,6 +54,17 @@ BEANSTALK.BeanStalk3D = function(name) {
 
 	this.halo = null;
 	this.haloDot = null;
+
+	this.primaryLine = null;
+	this.primaryTangentLine = null;
+	this.totalHeightIncrements = 50;
+
+	this.primaryLineNormals = null;
+	this.crossLineNormals = null;
+
+	this.tangentLineANormals = null;
+	this.tangentLineBNormals = null;
+	this.tangentLineCNormals = null;
 
 	// ---------------------------------------------------------
 	// instantiation
@@ -153,6 +164,158 @@ BEANSTALK.BeanStalk3D = function(name) {
 		return this;
 	};
 
+	this.createNewElements = function() {
+		// trace("createNewElements")
+		this.createPrimaryLine();
+		this.updatePrimaryLine();
+		this.createPrimaryTangentLine();
+		this.updatePrimaryTangentLine();
+
+		return this;
+	};
+
+	this.createPrimaryLine = function() {
+		this.traceFunction("createPrimaryLine");
+
+		var i,
+			geometry, 
+			material,
+			percentage,
+			total = this.totalHeightIncrements;
+
+		material = new THREE.LineBasicMaterial({ color: 0xFF00FF});
+		geometry = new THREE.Geometry();
+
+		this.primaryLineNormals = [];
+		this.crossLineNormals = [];
+		this.tangentLineANormals = [];
+		this.tangentLineBNormals = [];
+		this.tangentLineCNormals = [];
+		for(i = 0; i < total; i++) {
+			geometry.vertices.push(new THREE.Vector3(Math.random()*50-25, Math.random()*50-25, Math.random()*50-25 ));
+			this.primaryLineNormals.push(new THREE.Vector3());
+			this.crossLineNormals.push(new THREE.Vector3());
+			this.tangentLineANormals.push(new THREE.Vector3());
+			this.tangentLineBNormals.push(new THREE.Vector3());
+			this.tangentLineCNormals.push(new THREE.Vector3());
+
+		}
+		
+		this.primaryLine = new THREE.Line( geometry, material );
+		this.primaryLine.type = THREE.LineStrip;
+		this.base.add(this.primaryLine);
+
+		return this;
+
+	};
+
+	this.updatePrimaryLine = function() {
+		this.traceFunction("updatePrimaryLine");
+
+		var i,
+			geometry, 
+			material,
+			percentage,
+			vector,
+			identityVector = new THREE.Vector3(0,0,1);
+
+			total = this.totalHeightIncrements;
+
+
+		for(i = 0; i < total; i++) {
+			geometry = this.primaryLine.geometry.vertices[i];
+			percentage = i/total;
+			geometry.x = Math.cos(Math.PI*2*percentage*5)*40;
+			geometry.z = Math.sin(Math.PI*2*percentage*7.2323)*20;
+			geometry.y = (percentage*2.0-1)*200;
+		}
+
+		var theta = TWO_PI*.25;
+		vector = new THREE.Vector3(0,0,1);
+		for(i = 0; i < (total-1); i++) {
+			vector.copy(this.primaryLineNormals[i]);
+			vector.subVectors( this.primaryLine.geometry.vertices[i], this.primaryLine.geometry.vertices[i+1]);
+			this.crossLineNormals[i].crossVectors(identityVector,vector);
+			this.tangentLineANormals[i].copy(this.rotateAroundAxis(vector, this.crossLineNormals[i], theta));
+			this.tangentLineANormals[i].normalize();
+			this.tangentLineANormals[i].setLength(40);
+
+		}
+
+		return this;
+
+	};
+
+	this.createPrimaryTangentLine = function() {
+		this.traceFunction("createPrimaryTangentLine");
+
+		var i,
+			geometry, 
+			material,
+			percentage,
+			total = this.totalHeightIncrements*2;
+
+		material = new THREE.LineBasicMaterial({ color: 0x00FF00});
+		geometry = new THREE.Geometry();
+
+		for(i = 0; i < total; i++) {
+			geometry.vertices.push(new THREE.Vector3(Math.random()*50-25, Math.random()*50-25, Math.random()*50-25 ));
+		}
+		
+		this.primaryTangentLine = new THREE.Line( geometry, material, THREE.LinePieces	 );
+		this.base.add(this.primaryTangentLine);
+
+		return this;
+
+	};
+
+	this.updatePrimaryTangentLine = function() {
+		this.traceFunction("updatePrimaryTangentLine");
+
+		var i,
+			geometry, 
+			material,
+			percentage,
+			total = this.totalHeightIncrements*2;
+
+		var id = 0;
+		for(i = 0; i < total; i+=2) {
+
+			geometry = this.primaryTangentLine.geometry.vertices[i];
+			percentage = i/total;
+			geometry.x = this.primaryLine.geometry.vertices[id].x;
+			geometry.z = this.primaryLine.geometry.vertices[id].z;
+			geometry.y = this.primaryLine.geometry.vertices[id].y;
+
+			geometry = this.primaryTangentLine.geometry.vertices[i+1];
+			percentage = i/total;
+			geometry.copy(this.primaryLine.geometry.vertices[id]);
+			// geometry.y = this.primaryLine.geometry.vertices[id].y;
+			// geometry.add(this.primaryTangentLine.geometry.vertices[id]);
+			geometry.add(this.tangentLineANormals[id]);
+
+			id++;
+			
+			// geometry.x = Math.cos(Math.PI*2*percentage*3)*10 + 10;
+			// geometry.z = Math.sin(Math.PI*2*percentage*2)*10;
+
+			// geometry.y = (percentage*2.0-1)*200;
+			// geometry.copy(this.tangentLineANormals[i/2], this.primaryTangentLine.geometry.vertices[i])
+		}
+
+
+		return this;
+
+	};
+
+
+
+
+
+
+
+
+
 	this.createPrimaryElements = function() {
 
 		var i,j,k,id,
@@ -193,7 +356,7 @@ BEANSTALK.BeanStalk3D = function(name) {
 			customPlane = new THREE.Mesh( geometry, material );
 			customPlane.castShadow = true;
 			customPlane.receiveShadow = true;
-			this.base.add(customPlane);
+			// this.base.add(customPlane);
 			this.customPlanes.push(customPlane);
 		}
 
@@ -274,7 +437,7 @@ BEANSTALK.BeanStalk3D = function(name) {
 		geometry.vertices.push(new THREE.Vector3(), new THREE.Vector3());
 		this.haloLine = new THREE.Line(geometry, material);
 		this.haloLine.type = THREE.Lines;
-		this.base.add(this.haloLine);
+		// this.base.add(this.haloLine);
 
 		material = new THREE.LineBasicMaterial({ color: 0xFFFFFF, wireframe:true, linewidth:.5});
 		geometry = new THREE.Geometry();
@@ -290,7 +453,7 @@ BEANSTALK.BeanStalk3D = function(name) {
 		material = new THREE.MeshBasicMaterial( { color: 0xFFFFFF, wireframe:true, linewidth:.5 } )
 		
 		this.haloDot = new THREE.Mesh( geometry, material );
-		this.base.add(this.haloDot);
+		// this.base.add(this.haloDot);
 
 		return this;
 	};
@@ -644,6 +807,34 @@ BEANSTALK.BeanStalk3D = function(name) {
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize( this.stageWidth, this.stageHeight );
 		this.controls.handleResize();
+
+	};
+
+	this.rotateAroundAxis = function(currentVector, vectorAxis, theta){
+		var ax = vectorAxis.x,
+			ay = vectorAxis.y,
+			az = vectorAxis.z,
+
+			ux = ax * currentVector.x,
+			uy = ax * currentVector.y,
+			uz = ax * currentVector.z,
+
+			vx = ay * currentVector.x,
+			vy = ay * currentVector.y,
+			vz = ay * currentVector.z,
+
+			wx = az * currentVector.x,
+			wy = az * currentVector.y,
+			wz = az * currentVector.z;
+
+			si = Math.sin(theta);
+			co = Math.cos(theta);
+
+			var xx = (ax * (ux + vy + wz) + (currentVector.x * (ay * ay + az * az) - ax * (vy + wz)) * co + (-wy + vz) * si);
+			var yy = (ay * (ux + vy + wz) + (currentVector.y * (ax * ax + az * az) - ay * (ux + wz)) * co + (wx - uz) * si);
+			var zz = (az * (ux + vy + wz) + (currentVector.z * (ax * ax + ay * ay) - az * (ux + vy)) * co + (-vx + uy) * si);
+
+		return (new THREE.Vector3(xx,yy,zz));
 
 	};
 

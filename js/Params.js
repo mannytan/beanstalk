@@ -25,8 +25,8 @@ BEANSTALK.Params = function(name) {
 	this.createGui = function() {
 
 		BEANSTALK.Params = {
-			orbitSpeed: 0.0015,
-			guiWidth: 250,
+			orbitSpeed: 0.0001,
+			guiWidth: 300,
 			radius: 200,
 			radiusRange: .75,
 			centerRadius: 10,
@@ -103,6 +103,9 @@ BEANSTALK.Params = function(name) {
 		f2.add(BEANSTALK.Params, 'randomizeColor').name('UPDATE COLOR');
 		// f2.add(BEANSTALK.Params, 'randomizeTotalNumbers').name('CHANGE RES');
 		f2.add(BEANSTALK.Params, 'toggleView').name('CHANGE VIEW');
+
+		f1.open();
+		f2.open();
 
 		this.guiContainer = document.getElementById('guiContainer');
 		this.guiContainer.appendChild(this.gui.domElement);

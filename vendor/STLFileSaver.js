@@ -12,30 +12,10 @@ find that here: https://github.com/eligrey/FileSaver.js
 */
 
 function stringifyVertex(vec){
-  return "vertex "+vec.x+" "+vec.y+" "+vec.z+" \n";
-}
-
-// Given a THREE.Geometry, create an STL string
-function generateSTL(geometry){
-  var vertices = geometry.vertices;
-  var tris     = geometry.faces;
-
-  var stl = "solid pixel";
-  
-  for(var i = 0; i<tris.length; i++){
-    stl += ("facet normal "+stringifyVertex( tris[i].normal )+" \n");
-    stl += ("outer loop \n");
-    stl += stringifyVertex( vertices[ tris[i].a ]);
-    stl += stringifyVertex( vertices[ tris[i].b ]);
-    stl += stringifyVertex( vertices[ tris[i].c ]);
-    stl += ("endloop \n");
-    stl += ("endfacet \n");
-    
-  }
-  
-  stl += ("endsolid");
-
-  return stl
+  var x = ((vec.x*10000) | 0) / 10000;
+  var y = ((vec.y*10000) | 0) / 10000;
+  var z = ((vec.z*10000) | 0) / 10000;
+  return (x)+" "+ (-z)+" "+(y);
 }
 
 // Use FileSaver.js 'saveAs' function to save the string
@@ -52,7 +32,7 @@ function saveSTL( geometry, name ){
 function generateSTLFromArray(geometryList){
   var geometry, vertices, tris;
 
-  var stl = "solid pixel";
+  var stl = "solid\n";
 
   for(var j = 0; j<geometryList.length; j++){
     geometry = geometryList[j].geometry;
@@ -62,9 +42,17 @@ function generateSTLFromArray(geometryList){
     for(var i = 0; i<tris.length; i++){
       stl += ("facet normal "+stringifyVertex( tris[i].normal )+" \n");
       stl += ("outer loop \n");
-      stl += stringifyVertex( vertices[ tris[i].a ]);
-      stl += stringifyVertex( vertices[ tris[i].c ]);
-      stl += stringifyVertex( vertices[ tris[i].b ]);
+      stl += ("vertex "+stringifyVertex( vertices[ tris[i].a ])+" \n");
+      stl += ("vertex "+stringifyVertex( vertices[ tris[i].b ])+" \n");
+      stl += ("vertex "+stringifyVertex( vertices[ tris[i].c ])+" \n");
+      stl += ("endloop \n");
+      stl += ("endfacet \n");
+
+      stl += ("facet normal "+stringifyVertex( tris[i].normal )+" \n");
+      stl += ("outer loop \n");
+      stl += ("vertex "+stringifyVertex( vertices[ tris[i].c ])+" \n");
+      stl += ("vertex "+stringifyVertex( vertices[ tris[i].d ])+" \n");
+      stl += ("vertex "+stringifyVertex( vertices[ tris[i].a ])+" \n");
       stl += ("endloop \n");
       stl += ("endfacet \n");
       

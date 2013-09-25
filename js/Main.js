@@ -25,8 +25,8 @@ BEANSTALK.Main = function(name) {
 	this.gui = null;
 
 	// stats
-	// this.stats = new Stats();
-	// this.stats.domElement.style.position = 'absolute';
+	this.stats = new Stats();
+	this.stats.domElement.style.position = 'absolute';
 
 	// 3d
 	this.beanStalk3D = null;
@@ -52,6 +52,7 @@ BEANSTALK.Main = function(name) {
 		this.beanStalk3D.createLights();
 		this.beanStalk3D.createSecondaryElements();
 		this.beanStalk3D.createPrimaryElements();
+		this.beanStalk3D.createNewElements();
 		// this.beanStalk3D.createListeners();
 		
 
@@ -59,7 +60,7 @@ BEANSTALK.Main = function(name) {
 		this.gui.createListeners();
 
 		this.loader = document.getElementById('loader');
-		// document.body.appendChild(this.stats.domElement);
+		document.body.appendChild(this.stats.domElement);
 
 		// stop the user getting a text cursor
 		document.onselectStart = function() {
@@ -80,7 +81,7 @@ BEANSTALK.Main = function(name) {
 	};
 
 	this.loop = function() {
-		// this.stats.update();
+		this.stats.update();
 		this.update();
 		if (this.isPaused) {
 			return this;
@@ -140,8 +141,8 @@ BEANSTALK.Main = function(name) {
 		this.beanStalk3D.setDimensions(this.stageWidth,this.stageHeight);
 		this.beanStalk3D.resize();
 
-		// this.stats.domElement.style.top = (10) + 'px';
-		// this.stats.domElement.style.right = (BEANSTALK.Params.guiWidth + 10) + 'px';
+		this.stats.domElement.style.top = (10) + 'px';
+		this.stats.domElement.style.right = (BEANSTALK.Params.guiWidth + 10) + 'px';
 
 	};
 
