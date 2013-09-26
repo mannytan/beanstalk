@@ -50,9 +50,7 @@ BEANSTALK.Main = function(name) {
 		this.beanStalk3D.setDimensions(this.stageWidth,this.stageHeight);
 		this.beanStalk3D.createEnvironment();
 		this.beanStalk3D.createLights();
-		this.beanStalk3D.createSecondaryElements();
-		this.beanStalk3D.createPrimaryElements();
-		this.beanStalk3D.createNewElements();
+		this.beanStalk3D.createElements();
 		// this.beanStalk3D.createListeners();
 		
 

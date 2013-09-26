@@ -41,7 +41,6 @@
 	$(document).ready(function() {
 
 		if(Modernizr.webgl) {
-		$('#notification').html("Drop experiment<br>Loading 6.7MB MP3 ...")
 			var beanStalk = new BEANSTALK.Main();
 			beanStalk.init();
 		} else {

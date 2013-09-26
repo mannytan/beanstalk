@@ -39,7 +39,7 @@ BEANSTALK.Params = function(name) {
 			noiseSpeed: .05,
 			noiseAmount: .3,
 			noiseIntensity:1,
-			speed: 3.25,
+			speed: 0.25,
 			colorSpeed:.0001,
 			colorRange:.125,
 			wrapAmount: 1.0,
@@ -73,7 +73,7 @@ BEANSTALK.Params = function(name) {
 		var f1 = this.gui.addFolder('BEANSTALK');
 		var f2 = this.gui.addFolder('GLOBAL');
 
-		BEANSTALK.Sliders.speed = f2.add(BEANSTALK.Params, 'speed', 0.1, 5.0).step(0.0005).name('speed');
+		BEANSTALK.Sliders.speed = f2.add(BEANSTALK.Params, 'speed', -1.0, 1.0).step(0.0005).name('speed');
 		BEANSTALK.Sliders.delay = f2.add(BEANSTALK.Params, 'delay', 0.0, 2.0).step(0.0005).name('delay');
 
 		BEANSTALK.Sliders.noiseSpeed = f1.add(BEANSTALK.Params, 'noiseSpeed', -.35, .35).step(0.0005).name('noiseSpeed');
