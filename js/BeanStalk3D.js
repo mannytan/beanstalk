@@ -320,7 +320,7 @@ BEANSTALK.BeanStalk3D = function(name) {
 			geometry.y = (i/total*2.0-1)*200;
 		}
 
-		var radius = 20;
+		var radius = BEANSTALK.Params.radius;
 		var theta = TWO_PI*.25;
 		var TO_RADIANS = Math.PI / 180;
 		var TO_DEGREES = 180 / Math.PI;

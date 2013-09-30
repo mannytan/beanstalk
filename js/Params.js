@@ -27,22 +27,8 @@ BEANSTALK.Params = function(name) {
 		BEANSTALK.Params = {
 			orbitSpeed: 0.0001,
 			guiWidth: 300,
-			radius: 200,
-			radiusRange: .75,
-			centerRadius: 10,
-			centerSpeed: 0.1,
-			centerOffset: 0.001,
-			multiplier: 10.0005,
-			heightOffset: 10,
-			waterHeight: 10,
-			maxHeightRange: 1,
-			noiseSpeed: .05,
-			noiseAmount: .3,
-			noiseIntensity:1,
+			radius: 20,
 			speed: 0.25,
-			colorSpeed:.0001,
-			colorRange:.125,
-			wrapAmount: 1.0,
 			delay: 0.150,
 			randomizeAllValues: function(){
 				scope.randomizeAllValues();
@@ -74,36 +60,7 @@ BEANSTALK.Params = function(name) {
 		var f2 = this.gui.addFolder('GLOBAL');
 
 		BEANSTALK.Sliders.speed = f2.add(BEANSTALK.Params, 'speed', -1.0, 1.0).step(0.0005).name('speed');
-		BEANSTALK.Sliders.delay = f2.add(BEANSTALK.Params, 'delay', 0.0, 2.0).step(0.0005).name('delay');
-
-		BEANSTALK.Sliders.noiseSpeed = f1.add(BEANSTALK.Params, 'noiseSpeed', -.35, .35).step(0.0005).name('noiseSpeed');
-		BEANSTALK.Sliders.noiseAmount = f1.add(BEANSTALK.Params, 'noiseAmount', 0, 3).step(0.0005).name('noiseAmount');
-		BEANSTALK.Sliders.noiseIntensity = f1.add(BEANSTALK.Params, 'noiseIntensity', .25, 2).step(0.0005).name('noiseIntensity');
-		
-		BEANSTALK.Sliders.radiusRange = f1.add(BEANSTALK.Params, 'radiusRange', 0.5, 1).step(0.0005).name('radiusRange');
-		BEANSTALK.Sliders.radius = f1.add(BEANSTALK.Params, 'radius', 100, 400).step(0.0005).name('radius');
-
-		BEANSTALK.Sliders.centerRadius = f1.add(BEANSTALK.Params, 'centerRadius', 0, 25).step(0.0005).name('centerRadius');
-		BEANSTALK.Sliders.centerSpeed = f1.add(BEANSTALK.Params, 'centerSpeed', -.1, .1).step(0.0005).name('centerSpeed');
-		BEANSTALK.Sliders.centerOffset = f1.add(BEANSTALK.Params, 'centerOffset', -2, 2).step(0.0005).name('centerOffset');
-
-		BEANSTALK.Sliders.multiplier = f1.add(BEANSTALK.Params, 'multiplier', -15, 15).step(0.0005).name('multiplier');
-		BEANSTALK.Sliders.maxHeightRange = f1.add(BEANSTALK.Params, 'maxHeightRange', -1, 1).step(0.0005).name('maxHeightRange');
-		
-		BEANSTALK.Sliders.heightOffset = f1.add(BEANSTALK.Params, 'heightOffset', -50, 50).step(0.0005).name('heightOffset');
-		BEANSTALK.Sliders.waterHeight = f1.add(BEANSTALK.Params, 'waterHeight', -100, 50).step(0.0005).name('waterHeight');
-
-		BEANSTALK.Sliders.wrapAmount = f1.add(BEANSTALK.Params, 'wrapAmount', 0, 1).step(0.0005).name('wrapAmount');
-		BEANSTALK.Sliders.orbitSpeed = f1.add(BEANSTALK.Params, 'orbitSpeed', -.1, .1).step(0.0005).name('orbitSpeed');
-
-		BEANSTALK.Sliders.colorSpeed = f1.add(BEANSTALK.Params, 'colorSpeed', -.001, .001).step(0.0005).name('colorSpeed');
-		BEANSTALK.Sliders.colorRange = f1.add(BEANSTALK.Params, 'colorRange', .0, .35).step(0.0005).name('colorRange');
-
-		this.gui.add(BEANSTALK.Params, 'randomizeAllValues').name('MORPH SHAPE');
-		f2.add(BEANSTALK.Params, 'randomizeColor').name('UPDATE COLOR');
-		// f2.add(BEANSTALK.Params, 'randomizeTotalNumbers').name('CHANGE RES');
-		f2.add(BEANSTALK.Params, 'toggleView').name('CHANGE VIEW');
-
+		BEANSTALK.Sliders.radius = f1.add(BEANSTALK.Params, 'radius', 1, 100).step(0.0005).name('radius');
 		f1.open();
 		f2.open();
 
