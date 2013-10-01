@@ -225,6 +225,20 @@ BEANSTALK.BeanStalk3D = function(name) {
 			percentage,
 			total = this.totalHeightIncrements*2;
 
+		var colorArray = [ 0x006600, 0x000066, 0x660000, 0x666600 ];
+		
+		// for( i=0; i<4; i++ ){
+		// 	material = new THREE.LineBasicMaterial({ color: 0x006600, transparent:true, opacity:.25});
+		// 	geometry = new THREE.Geometry();
+
+		// 	for(i = 0; i < total; i++) {
+		// 		geometry.vertices.push(new THREE.Vector3());
+		// 	}
+			
+		// 	this.primaryTangentLineA = new THREE.Line( geometry, material, THREE.LinePieces	 );
+		// 	this.base.add(this.primaryTangentLineA);
+		// }
+		
 		material = new THREE.LineBasicMaterial({ color: 0x006600, transparent:true, opacity:.25});
 		geometry = new THREE.Geometry();
 
