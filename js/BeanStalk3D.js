@@ -196,6 +196,7 @@ BEANSTALK.BeanStalk3D = function(name) {
 		this.tangentLineDNormals = [];
 
 		for(i = 0; i < total; i++) {
+
 			geometry.vertices.push(new THREE.Vector3(Math.random()*50-25, Math.random()*50-25, Math.random()*50-25 ));
 			this.primaryLineNormals.push(new THREE.Vector3());
 			this.crossLineNormals.push(new THREE.Vector3());
